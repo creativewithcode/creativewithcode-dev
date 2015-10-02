@@ -1,0 +1,48 @@
+<p>As the amount of JavaScript being written in modern web applications is growing, it&rsquo;s necessary to look at how we can manage our code. This post uses the example of a monkey battling game to demonstrate how we can structure JavaScript with some object oriented conventions seen in the more strongly typed programming languages..</p>
+<h4>Combination Constructor/Prototype Pattern</h4>
+<p>One way to convert&nbsp;functional JavaScript into something object oriented is&nbsp;with the use of the Comibination Constructor/Prototype Pattern. This pattern is easy to follow if you've used object oriented programming languages before. You can define a function that acts as the object's (or class's) constructor, and then add functions to the object/class using Prototype.</p>
+<h4>Monkey&nbsp;game example</h4>
+<p>Here's an example of the Combination Constructor/Prototype pattern used in a fictional game of fighting monkeys, where monkeys battle against eachother. Each monkey has different attributes, providing certain advantages and disadvantages when coming up in battle against other monkeys.</p>
+<h4>JavaScript Constructors</h4>
+<p>We'll start by looking at the&nbsp;constructor for a Monkey object.</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">/**
+* Monkey Constructor
+*/
+function Monkey(name, speed, power, agility){
+
+  this.name = name;
+  this.speed = speed;
+  this.power = power;
+  this.agility = agility
+}</pre>
+<p>A constructor is basically used to set up the main characteristics of an object. Our monkey constructor takes a speed value for how fast he is, power for how strong his attacks are, and agility for things such as swinging ability.</p>
+<p>So if we were to create a big strong monkey called King Kong, we'd do it in the following way:</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">var kingKong = new Monkey("King Kong",20,80,20)</pre>
+<p>This would create a new Monkey object, with the name "King Kong", a speed of 20 making him slow, a power of 80 (meaning he is very strong) and an agility value of 20 because he isn't very flexible. When passing these parameters to the Monkey constructor (by providing the <code>new</code> keyword), within the constructor, you'll notice the '<code>this</code>' keyword being used to assign the object certain values. For instance, <code>this.speed = speed</code> assigns the object being created a speed of whatever is passed into the constructor. &nbsp;this.speed is only accessible through the object you created. So if you did:</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">console.log(kingKong.speed)
+</pre>
+<p>The value '20' would be output to the console.&nbsp;</p>
+<h4>Prototype functions</h4>
+<p>So we can create monkeys using the constructor, but at the moment they can't actually do anything. Every monkey can do similar things such as eat, run, swing and attack, and we can enable our object to carry out such actions through adding extra functions through each object's&nbsp;prototype. So lets just do it:</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">Monkey.prototype = {
+    constructor: Monkey,
+    eat:function(){
+        console.log(this.name + " is eating");
+    },
+    run:function(){
+        console.log(this.name + " is running at a speed of: " + this.speed);
+    },
+    swing:function(){
+         console.log(this.name + " is swinging")
+    },
+    attack:function(){
+        console.log(this.name + " is attacking with power of: " + this.power);
+    }
+}</pre>
+<p><br />So in line 2, we add the monkey constructor, and then thereafter we add a list of different functions for the actions we want our monkeys to do. Each of the functions simply log an action to the console. So if we do:</p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">kingKong.swing();</pre>
+<p>..and open the console, we'll see "King Kong is swinging". Because we had assigned the monkey's name in the constructor, we can now access it using <code>this.name (</code>see line 4 above).</p>
+<p>And then if we did:</p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">kingKong.attack();</pre>
+<p>..it would output "King Kong is attacking with a power of 80". We get 80 here because again, that's what we passed into the constructor when creating our King Kong monkey object. This shows that this value is unique to this instance of the Monkey 'class'. If we created another monkey with different values, those values would&nbsp;only be available through the object created.</p>
+<p>That's pretty much all there is to it, for more info <a href="http://eloquentjavascript.net/1st_edition/chapter8.html" target="_blank">read here</a>.</p>

@@ -1,0 +1,90 @@
+<h4>Prerequisites</h4>
+<p>This post&nbsp;assumes you have completed this&nbsp;<a href="../../writings/post/seeing-sounds-part-3-star-field-terrain">previous tutorial</a>, where we'd created both a 3D terrain, and an animating starfield, and combined them into a single&nbsp;three.js experience. The source code where we left off looks&nbsp;<a href="https://github.com/GraemeFulton/threejs-starter/blob/master/StarsAndTerrain.html" target="_blank">like this</a>.</p>
+<h4>Outcome</h4>
+<p>Now, we'll look at how we can get the terrain animating so that from the viewer's perspective, they are travelling along it from a first person perspective. The outcome can be seen by hovering the giph below:</p>
+<p><iframe class="giphy-embed" style="max-width: 100%;" src="//giphy.com/embed/3oEduExDxizMJsksmY" width="480" height="272" frameborder="0" allowfullscreen="allowfullscreen"></iframe></p>
+<p>There are multiple ways to animate a terrain, and for simplicity and speed, we'll do it&nbsp;in the exact same way we animated the stars in the starfield. This will get the effect up and running quickly as we're already familiar with the technique involved.</p>
+<p>Another way to create this effect would be to move&nbsp;the floor&nbsp;based on the position of the camera - we'll do it that way in another tutorial.</p>
+<h3>Step 1:&nbsp;The animation concept</h3>
+<p>In this step, we're just going to understand the&nbsp;way in which we will animate the floor.</p>
+<ul>
+<li>Firstly, we'll quickly recap how the starfield was animated, so just skip that part if you remember.</li>
+<li>Secondly, we'll&nbsp;look at applying that&nbsp;same concept to animate the terrain.</li>
+</ul>
+<h4>Recap</h4>
+<p>If you look back to the stars code in <a href="../../writings/post/seeing-sounds-part-1-creating-the-star-field">one of the earlier&nbsp;tutorials</a>, you'll see that we added a stars array at the start of the script, and then in the <code>addSphere</code> function we populated that array with spheres/stars. Then when it came to rendering the scene, we then animated the stars held in that array to make it look as though each one is moving forward. And once each star had a z-position greater than the camera position, we reset it's z-position so that it animated forward from the back again.</p>
+<h4>Applying the animation to the terrain</h4>
+<p>We're going to use this exact same concept&nbsp;from the recap above&nbsp;with the terrain. So where we added a&nbsp;<code>stars[]</code>&nbsp;array in for the starfield, we'll add a&nbsp;<code>floor[]</code>&nbsp;array for the ground. But instead of having lots of different terrain items like we had many spheres, we only need to hold 2 planes in&nbsp;the array.</p>
+<p>We only need two terrain items because what we're making will work like a treadmill conveyor belt. When the scene is loaded, we'll start off with two terrains on the scene, one with a z-positioning so that it is just behind the other. We then animate both terrains towards the camera as seen in image A below. Then when terrain 1 moves past the camera, we reposition it behind the second as showin in image B. We then keep animating both forward, and putting one behind the other to create the effect that we are moving along an infinite plane.</p>
+<p>&nbsp;</p>
+<p>&nbsp;<img src="../../post/multiple/4c9ceab7e0d13f6f013e6c7f4542cb4e.png" alt="terrain " width="324" height="324" />&nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;<img src="../../post/multiple/4271b8c843e22ba6541e12cd80795d0e.png" alt="terrain " width="323" height="324" /></p>
+<p>&nbsp;</p>
+<h3>Step 2:&nbsp;Setting up the two terrains</h3>
+<p>Working from the code in the last tutorial, we need to add a <code>floor[]</code> array where our global variables are defined:</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">var camera, scene, renderer, stars=[], floor=[];</pre>
+<p>That's really simple, now we need to modify the <code>addGround()</code>&nbsp;function so that it looks like the next code snippet. This looks like a lot of code at first glance, but don't be alarmed&nbsp;as it's just a modification on what we've already got, and we'll step through what's going on next:</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">  function addGround(){
+
+     for ( var z= -1600; z &lt; 1600; z+=800 ) {
+
+          //create the ground material using MeshLambert Material
+          var groundMat = new THREE.MeshLambertMaterial( {color: 0xffffff, side: THREE.DoubleSide}  );
+
+          //create the plane geometry
+          var geometry = new THREE.PlaneGeometry(240,800,300,300);
+
+          //make the terrain bumpy
+          for (var i = 0, l = geometry.vertices.length; i &lt; l; i++) {
+            var vertex = geometry.vertices[i];
+            var value = pn.noise(vertex.x / 10, vertex.y /10, 0);
+            vertex.z = value *6;
+          }
+
+          //ensure light is computed correctly
+          geometry.computeFaceNormals();
+          geometry.computeVertexNormals();
+
+          //create the ground form the geometry and material
+          var ground = new THREE.Mesh(geometry,groundMat);
+          //rotate 90 degrees around the xaxis so we can see the terrain
+          ground.rotation.x = -Math.PI/-2;
+
+          // Then set the z position to where it is in the loop (distance of camera)
+          ground.position.z = z;
+          ground.position.y -=4;
+
+          //add the ground to the scene
+          scene.add(ground);
+          //finally push it to the stars array
+          floor.push(ground);
+        }
+
+  }</pre>
+<h4>Positioning one terrain behind the other</h4>
+<p>The first main change is the parameters passed to the <code>PlaneGeometry</code> constructor on line 9. The constructor arguments are as follows:</p>
+<h5 style="padding-left: 60px;">PlaneGeometry(<a title="Float">width</a>,&nbsp;<a title="Float">height</a>,&nbsp;<a title="Integer">widthSegments</a>,&nbsp;<a title="Integer">heightSegments</a>)</h5>
+<div style="padding-left: 60px;">width &mdash; Width along the X axis.<br />height &mdash; Height along the Y axis.<br />widthSegments &mdash; Optional. Default is 1.&nbsp;<br />heightSegments &mdash; Optional. Default is 1.</div>
+<div style="padding-left: 60px;">&nbsp;</div>
+<p>Most notably, we're now passing in a value of 800 for the height along the Y axis. And&nbsp;because of this, when looping through the two terrains, we need to position them at z-position intervals of 800. This is&nbsp;why the <code>for</code> loop in line 3 starts off at <code>-1600</code>, and loops to <code>1600</code>, with an increment value of <code>800</code>:</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">for ( var z= -1600; z &lt; 1600; z+=800 )</pre>
+<p>The position is actually set in line 28:</p>
+<pre class="brush:html;auto-links:false;toolbar:false">ground.position.z = z;</pre>
+<p>By doing this, we ensure one terrain is always positioned behind the other. The only other notable change is that as well as adding the ground to the scene, we also add it to the floors array at the end (line 34):</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">floor.push(ground);</pre>
+<h3>Step 3: Animating the terrains&nbsp;</h3>
+<p>When&nbsp;rendering the scene, we can animate the terrains with pretty much the same code that was used for the stars. In fact, we can do it within the same function. So to start with, we'll change the name of the animateStars() function to <code>animateScene()</code>, and also update&nbsp;the call to the function at the bottom of our script.</p>
+<p>Then at the bottom of <code>animateScene()</code>, we'll add the following code:</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">  for(var i=0; i&lt;floor.length; i++) {
+
+      ground = floor[i];
+
+      // move it forward by a 10th of its array position each time
+      ground.position.z +=  0.5;
+
+      // once the star is too close, reset its z position
+      if(ground.position.z&gt;400) ground.position.z-=1600;
+    }</pre>
+<p>Since this is called in the render function, it's run 60 times every second. Therefore, we are constantly incrementing the position of both terrains (line 6) until they go beyond the camera, where we reset the position to -1600 (line 9).</p>
+<h3>Well Done</h3>
+<p>That's all there is to&nbsp;creating an infinite floor effect. We'll look at better ways to implement this in the future, but for now you should have the full effect. The entire&nbsp;source code is&nbsp;<a href="https://github.com/GraemeFulton/threejs-starter/blob/master/AnimatingStarsAndTerrain.html" target="_blank">here&nbsp;on GitHub</a>.</p>
+<p>&nbsp;</p>
