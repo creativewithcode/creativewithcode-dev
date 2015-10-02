@@ -1,0 +1,27 @@
+<p><span style="font-size: 14px; font-weight: normal;">Previously, we&nbsp;created an <a title="audio analyser" href="../../writings/post/creating-a-sound-analyser-with-the-web-audio-api" target="_blank">audio analyser</a>&nbsp;which sets up everything we need to start of analysing music. We left off by using the&nbsp;</span><code style="font-size: 14px; font-weight: normal;">onaudioprocess</code><span style="font-size: 14px; font-weight: normal;">&nbsp;event handler of the script processor node to call our&nbsp;<code>analyseBoost</code> function, which will analyse the music. In this tutorial&nbsp;we'll finish off looking at the <code>analyseBoost</code> function, and look at h</span>ow it&nbsp;measures the sound level of a&nbsp;track by leveraging the audio&nbsp;analyser.</p>
+<h3>Analyse Boost</h3>
+<p>We left off by using the <code>onaudioprocess</code>&nbsp;event handler of the script processor node to call our&nbsp;analyseBoost function:</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">scriptProcessorNode.onaudioprocess = function(e) {
+              audioAnalyserInstance.analyseBoost();
+           }</pre>
+<p>This means that for as long as audio is being processed, or the song is playing, we will be analysing the music. Therefore, if we set the music to play during the&nbsp;<code>init()</code>&nbsp;function of a three.js scene, the we will constantly be analysing the boost of the song, meaning that within the <code>render()</code> function of a&nbsp;three.js scene we will have real time access to the music data.&nbsp;</p>
+<p>Now let's see how the boost is actually analysed for use in the three.js <code>render()</code> function.</p>
+<h3>The code</h3>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">    analyseBoost:function(){
+
+          var audioArray = new Uint8Array(this.analyser.frequencyBinCount);
+
+       this.analyser.getByteFrequencyData(audioArray);
+
+          this.boost = 0;
+
+          for (var i = 0; i &lt; audioArray.length; i++) {
+              this.boost += audioArray[i];
+           }
+
+          this.boost = this.boost / audioArray.length;
+    }</pre>
+<p>To analyse the sound frequency of our file, we&nbsp;use the <code>frequencyBinCount</code>&nbsp;property of the analyser node to calculate the number of values needed for the visualization (<a title="frequencyBinCount" href="https://developer.mozilla.org/en-US/docs/Web/API/AnalyserNode/frequencyBinCount" target="_blank">see here</a>).&nbsp;&nbsp;We then use this&nbsp;<code>Uint8Array</code> (<code>audioArray</code>) as an argument to&nbsp;<code>getByteFrequencyData()</code>, which copies the frequency data into our&nbsp;<code>audioArray</code> (line 5).</p>
+<p>Then in line 7, the boost variable (which is used by external classes) is initialized to 0. We then add each index of the <code>audioArray</code> to the boost variable in the for loop on lines 9-11, and then get the average boost by dividing the boost by the number of items in the <code>audioArray</code> on line 13.</p>
+<h3>Improvements</h3>
+<p>The boost detected here is only a 'loudness' value, and doesn't allow us to analyse the track for specific instruments. Possible improvements to this JavaScript object would be to add additional functions to detect different characteristics of the music.&nbsp;</p>
