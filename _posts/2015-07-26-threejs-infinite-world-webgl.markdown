@@ -1,0 +1,9 @@
+---
+layout: post
+title:  "Coding an infinite 3D world with three.js [Part 2]"
+date:   2015-07-26 11:34:20
+categories: ThreeJS
+author: Graeme Fulton
+image: http://www.graemefulton.com/post/single/1f6aae91ef5281315f27f0a9aa7f9264.jpg
+---
+{% include /imported/threejs-infinite-world-webgl.html %}

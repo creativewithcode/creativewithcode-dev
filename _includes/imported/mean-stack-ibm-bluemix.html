@@ -1,0 +1,51 @@
+<p>This is a follow up to a previous post: "<a title="Mean stack on heroku" href="../../writings/post/the-mean-stack-on-heroku-configuring-mongodb-and-gulp" target="_blank">The MEAN Stack on Heroku</a>", which looked at deploying and building a MEAN stack application in the cloud via Heroku.</p>
+<p>This time, I'm doing the exact same thing on IBM Bluemix, but this time I&nbsp;will focus primarily on configuring the Bluemix MongoDB service, as the rest is the same as when using&nbsp;Heroku.</p>
+<h3>Configuring MongoLab on Bluemix</h3>
+<p>You first need to install the MongoLab service on Bluemix and register it to your app. You can do that using cloud foundry from the command line, or just add it from the web interface.</p>
+<p>Once MongoLab is installed and connected to your app, you&rsquo;ll need to ensure your mongoose connection is set to use Bluemix's&nbsp;environmental variable, as well as your own (so you don't break how things work locally). That can be done by altering the way you connect to the database using<code style="box-sizing: border-box; border-radius: 4px; font-family: Menlo, Monaco, Consolas, 'Courier New', monospace; font-size: 14.3999996185303px; padding: 2px 4px; color: #595959; border: 1px solid #e4e4e4; line-height: 28px; background-color: #f5f7f8;">mongoose.connect()</code>. For my app, I altered my db.js file to following:</p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">if (process.env.VCAP_SERVICES)
+{
+      var env = JSON.parse(process.env.VCAP_SERVICES);
+
+      for (var svcName in env)
+      {
+            if (svcName.match(/^mongo.*/))
+            {
+               mongoose.connect(env['mongolab'][0].credentials.uri);
+               console.log ("Connected to mongodb service");
+
+            }
+       }
+}
+else{
+
+mongoose.connect('mongodb://localhost/social');
+
+}
+</pre>
+<p>Bluemix stores the mongodb connection variable in an environmental variable called <code>VCAP_SERVICES</code>, so we need to find it and use it within <code>mongoose.connect()</code>. Here's what's happening in the above code snippet:&nbsp;</p>
+<ul>
+<li>In line 3, we store the <code>VCAP_SERVICES</code>&nbsp;variable into a local variable called env &nbsp;</li>
+<li>In line 5, we loop through the different service names stored in env</li>
+<li>line 6 is a check to see if any service names match 'mongo'</li>
+<li>If so, we can be sure our service is installed correctly. The mongolab service variable holds an array of information - one of which is details, which holds our connection URI - which we can use to connect with (line 8)</li>
+</ul>
+<p>&nbsp;Apart from doing this there's one more bit that needs fixing before the app will run:</p>
+<h3>Set the port&nbsp;</h3>
+<p>When creating a node server locally, it's pretty standard to use port 3000. However, I found Bluemix doesn't like this, as it also has its own environmental variable for the port too: process.env.VCAP_APP_PORT, which you can use like so:</p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">var port = 3000;
+if (process.env.VCAP_APP_PORT !== null) {
+    port = process.env.VCAP_APP_PORT;
+}
+
+app.listen(port, function(){
+
+	console.log('listening on ', 3000)
+
+})</pre>
+<p>&nbsp;</p>
+<h3>Updates</h3>
+<ul>
+<li>See <a href="https://developer.ibm.com/bluemix/2014/07/17/node-cfenv-makes-it-easy/" target="_blank">here</a>&nbsp;for a better way to access VCAP_SERVICES</li>
+</ul>
+<p>&nbsp;</p>

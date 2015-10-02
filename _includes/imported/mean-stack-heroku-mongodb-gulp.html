@@ -1,0 +1,47 @@
+<p class="p1">I&rsquo;ve been working with the MEAN stack, following an example in Jeff Dickey&rsquo;s book: &ldquo;Write Modern Web Apps with the MEAN Stack&rdquo; to create a web&nbsp;application. &nbsp;I had it working fine locally, but encountered a few problems when deploying the app in the cloud using Heroku, which is what I'm outlining in this post. I'll start with how I create the app from the web interface, and then configuring MongoDB and Gulp to work on Heroku.&nbsp;</p>
+<h3 class="p1">1. Create a Heroku App&nbsp;</h3>
+<p class="p1"><span class="s1">Here was my general process:</span></p>
+<ol>
+<li>Create a new app in from the Heroku web interface</li>
+<li>Clone my git repository and <code>cd</code> into my cloned project directory</li>
+<li>Then follow the instructions provided by heroku to log into and push the app up:<br /><br />
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; line-height: 24px; font-size: 13px; color: #7d7d8e; font-family: benton-sans, 'Helvetica Neue', helvetica, arial, sans-serif; -webkit-font-smoothing: subpixel-antialiased !important;">If you haven't already, log in to your Heroku account and follow the prompts to create a new SSH public key.</p>
+<pre style="box-sizing: border-box; overflow: auto; font-size: 13px; font-family: Menlo, Monaco, Consolas, 'Courier New', monospace; padding: 9.5px; margin-top: 0px; margin-bottom: 10px; line-height: 1.42857; word-break: break-all; word-wrap: break-word; color: #3f3f44; border: 1px solid #e0e0e6; border-radius: 4px; -webkit-font-smoothing: subpixel-antialiased !important; background-color: #fcfcfd;">$ heroku login</pre>
+<h4 style="box-sizing: border-box; font-family: benton-sans, 'Helvetica Neue', helvetica, arial, sans-serif; font-weight: 400; line-height: 1.1; color: #3f3f44; margin-top: 20px; margin-bottom: 10px; -webkit-font-smoothing: subpixel-antialiased !important;">Clone the repository</h4>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; line-height: 24px; font-size: 13px; color: #7d7d8e; font-family: benton-sans, 'Helvetica Neue', helvetica, arial, sans-serif; -webkit-font-smoothing: subpixel-antialiased !important;">Use Git to clone&nbsp;social-app-test's source code to your local machine.</p>
+<pre style="box-sizing: border-box; overflow: auto; font-size: 13px; font-family: Menlo, Monaco, Consolas, 'Courier New', monospace; padding: 9.5px; margin-top: 0px; margin-bottom: 10px; line-height: 1.42857; word-break: break-all; word-wrap: break-word; color: #3f3f44; border: 1px solid #e0e0e6; border-radius: 4px; -webkit-font-smoothing: subpixel-antialiased !important; background-color: #fcfcfd;">$ heroku git:clone -a app-name
+$ cd app-name</pre>
+<h4 style="box-sizing: border-box; font-family: benton-sans, 'Helvetica Neue', helvetica, arial, sans-serif; font-weight: 400; line-height: 1.1; color: #3f3f44; margin-top: 20px; margin-bottom: 10px; -webkit-font-smoothing: subpixel-antialiased !important;">Deploy your changes</h4>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; line-height: 24px; font-size: 13px; color: #7d7d8e; font-family: benton-sans, 'Helvetica Neue', helvetica, arial, sans-serif; -webkit-font-smoothing: subpixel-antialiased !important;">Make some changes to the code you just cloned deploy them to Heroku using Git.</p>
+<pre style="box-sizing: border-box; overflow: auto; font-size: 13px; font-family: Menlo, Monaco, Consolas, 'Courier New', monospace; padding: 9.5px; margin-top: 0px; margin-bottom: 10px; line-height: 1.42857; word-break: break-all; word-wrap: break-word; color: #3f3f44; border: 1px solid #e0e0e6; border-radius: 4px; -webkit-font-smoothing: subpixel-antialiased !important; background-color: #fcfcfd;">$ git add .
+$ git commit -am "make it better"
+$ git push heroku master<br /><br /></pre>
+</li>
+</ol>
+<p>At this stage, I was getting the following Heroku application error when visiting the URL of my new app:</p>
+<p><img src="http://i.stack.imgur.com/QvuHW.png" alt="Heroku Application Error" width="513" height="208" /></p>
+<p class="p3"><span class="s1">There were a couple problems causing this - the MongoDB connection is broken, and the gulp tasks aren't running. These problems are addressed below:</span></p>
+<h3>2. Fixing the MongoDB Connection</h3>
+<p>To run MongoDB on Heroku, you need to install it as a service for your app, which can be done in one line:</p>
+<p class="p3"><code><span class="s1">heroku addons:add mongolab &nbsp;</span></code></p>
+<p>Once MongoLab is installed, you&rsquo;ll need to ensure your mongoose connection is set to use Heroku&rsquo;s environmental variable, as well as your own (so you don't break how things work locally). That can be done really easily by adding the&nbsp;<code>process.env.MONGOLAB_URL</code>&nbsp;variable when&nbsp;using <code>mongoose.connect()</code>. For my app it was in my db.js file:</p>
+<p class="p2">&nbsp;</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">mongoose.connect(process.env.MONGOLAB_URI || 'mongodb://localhost/social', function(){
+
+console.log('mongodb connected');
+
+})
+</pre>
+<p class="p3">&nbsp;</p>
+<h3 class="p3">3.&nbsp;Running gulp on Heroku</h3>
+<p class="p5">&nbsp;To run the app locally, I was entering <code>gulp dev</code>&nbsp;from the console, which was running a bunch of tasks to build and serve the app.&nbsp;</p>
+<p class="p2">Of course, when you push the app to Heroku, this step is missing so the app never builds. This can be easily solved by modifying your <code>package.json</code> to include a <strong>start script</strong> which is always run by Heroku. In the start script, you can enter any tasks you want to run straight away - mine was <code>gulp dev</code>:</p>
+<p class="p2">&nbsp;</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">&nbsp; "scripts": {
+
+&nbsp; &nbsp; "start": "gulp dev"
+
+&nbsp; }</pre>
+<p class="p2">Now you can commit and push those changes to Heroku and it should work. If it doesn&rsquo;t, just run <code>heroku logs</code>&nbsp;from the terminal, and do some googling around the errors.&nbsp;</p>
+<h3 class="p2">What's next?</h3>
+<p class="p2"><a title="MongoDB + Bluemix" href="../../writings/post/mean-stack-on-ibm-bluemix-configuring-mongodb" target="_blank">Doing the same thing with IBM Bluemix</a></p>

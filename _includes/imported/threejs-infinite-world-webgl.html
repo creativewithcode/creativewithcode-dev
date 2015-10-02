@@ -1,0 +1,114 @@
+<p><a title="infinite threejs terrain part 1" href="../../writings/post/coding-an-infinite-3d-world-with-threejs-part-1">Part 1</a>&nbsp;of this tutorial left off with just one column of tiles, and the ability to move along the Z axis infinitely. Here, we're going to build the full grid, and enable the same infinite movement across the X axis.</p>
+<hr />
+<h3>Step 1: Build up&nbsp;a grid</h3>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; font-family: Merriweather, serif; line-height: 28px; color: #4d4d4d; font-size: 16px; border-radius: 0px !important;">Just by changing the X position of the tiles, they will apear to the side of the camera:</p>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; font-family: Merriweather, serif; line-height: 28px; color: #4d4d4d; font-size: 16px; border-radius: 0px !important;"><iframe style="box-sizing: border-box; border-radius: 0px !important; max-width: 100%;" src="https://www.youtube.com/embed/vnBPgDxRnUI" width="359" height="202" frameborder="0" allowfullscreen="allowfullscreen"></iframe></p>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; font-family: Merriweather, serif; line-height: 28px; color: #4d4d4d; font-size: 16px; border-radius: 0px !important;">Now that we already have one row moving forwards, we can create two more rows either side of it to make a total of&nbsp;9 tiles in&nbsp;3 rows x 3 columns. The changes now are that in the constructor at the top of the terrainMatrix.js file, I have provided definitions for the tile height, width and row number to make the rest of the code easier to understand:&nbsp;</p>
+<pre class="brush:js;auto-links:false;toolbar:false">  function TerrainMatrix(){
+
+    this.floor = [];
+    this.tileHeight=100;
+    this.tileWidth=100;
+    this.tileRowNumber = 3;
+
+  }</pre>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; font-family: Merriweather, serif; line-height: 28px; color: #4d4d4d; font-size: 16px; border-radius: 0px !important;">Then, inside <code>createTerrainMatrix(</code>), all we need to do to add two extra rows is wrap the main contents with a for loop that will force the funciton to execute three times. However in addition to this, we provide an alternative&nbsp;X position for each of the three rows.</p>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; font-family: Merriweather, serif; line-height: 28px; color: #4d4d4d; font-size: 16px; border-radius: 0px !important;">The alternative X position is created towards the top of the function where an xPos is defined. Just in side the loop, we set this X position for each of the three row iterations:&nbsp;</p>
+<pre class="brush:js;auto-links:false;toolbar:false">var xPos=0;
+          //we want a 3 by 3 matrix
+          for(var x = 1; x&lt;4; x+=1){
+            console.log(x)
+            if(x==1){
+              xPos= -this.tileWidth;
+            }
+            else if(x==2){
+              xPos= this.tileWidth;
+            }
+            else if (x==3){
+              xPos = 0
+            }<br /><br /></pre>
+<h4>Setting the X Position&nbsp;</h4>
+<ul>
+<li>The first row (iteration of the loop) sets X to minus the tile width so it appears on the left</li>
+<li>The second row sets&nbsp;X to 0 so it appears in the center where the camera is</li>
+<li>The third row sets X to&nbsp;plus the tile width, so it appears to the right of the camera</li>
+</ul>
+<p>Bringing&nbsp;it all together, the rest of the function is exactly the same, except the X position is altered with.&nbsp;<code>ground.position.x = xPos</code>.</p>
+<pre class="brush:js;auto-links:false;toolbar:false">  /**
+   * Terrain functions
+   */
+  TerrainMatrix.prototype={
+
+    constructor: TerrainMatrix,
+
+    /**
+     * createTerrainMatrix
+     * @TODO: create the matrix of terrains - need to add 9 bits of terrain
+     */
+    createTerrainMatrix:function(scene, perlinNoise){
+
+          var xPos=0;
+          //we want a 3 by 3 matrix
+          for(var row = 0; row&lt;3; row+=1){
+            if(row==0){
+              xPos= -this.tileWidth;
+            }
+            else if(row==1){
+              xPos= this.tileWidth;
+            }
+            else if (x==2){
+              xPos = 0
+            }
+
+            //every 100px on the z axis, add a bit of ground
+            for ( var z= this.tileHeight; z &gt; (this.tileHeight * -this.tileRowNumber); z-=this.tileHeight ) {
+
+              //Create the perlin noise for the surface of the ground
+      	      var perlinSurface = new PerlinSurface(perlinNoise, this.tileWidth, this.tileHeight);
+              var ground = perlinSurface.surface;
+              //rotate 90 degrees around the xaxis so we can see the terrain
+              ground.rotation.x = -Math.PI/-2;
+              // Then set the z position to where it is in the loop (distance of camera)
+              ground.position.z = z;
+              ground.position.y -=4;
+
+              ground.position.x =xPos;
+
+              //add the ground to the scene
+              scene.add(ground);
+              //finally push it to the floor array
+              this.floor.push(ground);
+            }
+          }
+
+    },</pre>
+<hr />
+<h3>Step 2: Be less memory intensive</h3>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; font-family: Merriweather, serif; line-height: 28px; color: #4d4d4d; font-size: 16px; border-radius: 0px !important;">One major alteration is required here for this to work. At the moment, we're creating terrain using <code>PlaneGeometry</code> in the <code>PerlinSurface</code>&nbsp;function:&nbsp;</p>
+<pre class="brush:js;auto-links:false;toolbar:false">//create the plane geometry
+     this.geometry = new THREE.PlaneGeometry(width,height,300,300);</pre>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; font-family: Merriweather, serif; line-height: 28px; color: #4d4d4d; font-size: 16px; border-radius: 0px !important;">This is too memory intensive to create 9 pieces of terrain. Therefore we need to modify this function to use BufferGeometry, which luckily for us can be done in one line:</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">      var bufferGeometry = new THREE.BufferGeometry().fromGeometry( this.geometry)
+</pre>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; font-family: Merriweather, serif; line-height: 28px; color: #4d4d4d; font-size: 16px; border-radius: 0px !important;">Here, we use the <code>fromGeometry()</code> method to convert <code>PlaneGeometry</code> to <code>BufferGemetry</code>.<br />At this point we've got a 3 x 3 grid, and are able to move forward and backwards, but not left and right (without reaching the edge).</p>
+<hr />
+<h3>Step 3: Moving along the X axis</h3>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; font-family: Merriweather, serif; line-height: 28px; color: #4d4d4d; font-size: 16px; border-radius: 0px !important;">Very similar code monitoring the Z axis can be used to detect when the camera moves left or right (along the X axis), allowing us to add terrain appropriately along the X axis.</p>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; font-family: Merriweather, serif; line-height: 28px; color: #4d4d4d; font-size: 16px; border-radius: 0px !important;"><iframe style="box-sizing: border-box; border-radius: 0px !important; max-width: 100%;" src="https://www.youtube.com/embed/rhFnA_OnMTY" width="359" height="202" frameborder="0" allowfullscreen="allowfullscreen"></iframe></p>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; font-family: Merriweather, serif; line-height: 28px; color: #4d4d4d; font-size: 16px; border-radius: 0px !important;">Here is the code to be added to the <code>moveWithCamera()</code> function under the last if clause:&nbsp;</p>
+<pre class="brush:js;auto-links:false;toolbar:false">//x positions
+          else if((this.floor[i].position.x - this.tileWidth)&gt;camera.position.x){
+
+            this.floor[i].position.x-=(this.tileWidth*2);
+          }
+          //if the camera has moved past the entire square in the opposite direction, move the square the opposite way
+          else if((this.floor[i].position.x + this.tileWidth)&lt;camera.position.x){
+
+            this.floor[i].position.x+=(this.tileWidth*2);
+          }</pre>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; font-family: Merriweather, serif; line-height: 28px; color: #4d4d4d; font-size: 16px; border-radius: 0px !important;">It's exactly the same as the Z position checks, but monitors the X positions, and uses the <code>tileWidth</code> rather than <code>tileHeight</code>.</p>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; font-family: Merriweather, serif; line-height: 28px; color: #4d4d4d; font-size: 16px; border-radius: 0px !important;">Now the user is trapped, as whatever direction they move, more terrain is 'created'.</p>
+<hr />
+<h3>Well done - but how can this be improved?</h3>
+<p>You should now have an infinite terrain, but I'm sure this could be improved. After creating this tutorial, I have experimented with the size and number of tiles used to create this effect, and it can be done using just a 2 x 2 grid. Creating and updating just 4 tiles is much less intensive on memory than 9. I'll write a follow up tutorial on this soon.</p>
+<p>The live improved version can be seen&nbsp;<a title="infinite plane" href="../../MusicViz/seeingsounds/visualizer.html" target="_blank">here</a>. Use up, down, left, right&nbsp;to navigate. Use P&nbsp;to position back to the start.</p>

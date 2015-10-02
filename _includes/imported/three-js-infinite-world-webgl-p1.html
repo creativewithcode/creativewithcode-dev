@@ -1,0 +1,78 @@
+<h3 style="box-sizing: border-box; font-family: 'Merriweather Sans', sans-serif; line-height: 1.3; color: #4d4d4d; margin-top: 20px; margin-bottom: 10px; font-size: 24px; border-radius: 0px !important;">Intro</h3>
+<p>This tutorial will show you how to create an infinite terrain that can be used in combination with a <a href="http://stemkoski.github.io/Three.js/Chase-Camera.html">Chase Camera</a>. If you try the&nbsp;<a href="http://stemkoski.github.io/Three.js/Chase-Camera.html">Chase Camera</a>&nbsp;demo, the concept created in this tutorial is the creation of new terrain when the object reaches the edge of the existing terrain.</p>
+<h4>Outcome</h4>
+<p>The entire tutorial will creatie a 9 x 9 grid, keeping the camera in the middle. In this part, we'll just be creating the first column made up of three tiles.</p>
+<ul>
+<li>Step 1 will create those three tiles</li>
+<li>Step 2 will allow us to move forward, adding ground in front of us</li>
+<li>Step 3 will allow us to move backwards, adding ground in the opposite direction.</li>
+</ul>
+<p>This will put is in a good position for <a title="infinite threejs terrain part 2" href="../../writings/post/coding-an-infinite-3d-world-with-threejs-part-2">Part 2</a>, where we'll replicate this column twice more to create the full grid, ending in the final infinite world.</p>
+<hr />
+<h3 style="box-sizing: border-box; font-family: 'Merriweather Sans', sans-serif; line-height: 1.3; color: #4d4d4d; margin-top: 20px; margin-bottom: 10px; font-size: 24px; border-radius: 0px !important;">Step 1: &nbsp;Start off with three tiles</h3>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; font-family: Merriweather, serif; line-height: 28px; color: #4d4d4d; font-size: 16px; border-radius: 0px !important;">First, create three tiles with the camera positioned in the middle:</p>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; font-family: Merriweather, serif; line-height: 28px; color: #4d4d4d; font-size: 16px; border-radius: 0px !important;"><iframe style="box-sizing: border-box; border-radius: 0px !important; max-width: 100%;" src="https://www.youtube.com/embed/mXDzRLPOjQI" width="359" height="202" frameborder="0" allowfullscreen="allowfullscreen"></iframe></p>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; font-family: Merriweather, serif; line-height: 28px; color: #4d4d4d; font-size: 16px; border-radius: 0px !important;">As seen in the video, we're creating three tiles of terrain in a row (to create the initial terrain,&nbsp;<a title="Creating a terrain with three.js" href="../../writings/post/seeing-sounds-part-2-creating-the-terrain">look here</a>), using tiles of 100 x 100 for simplicity. This is all done inside the <code>createTerrainMatrix</code> function. Look at the <code>for</code> loop from within the main block of code:</p>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; font-family: Merriweather, serif; line-height: 28px; color: #4d4d4d; font-size: 16px; border-radius: 0px !important;"><span class="pl-k" style="box-sizing: border-box; color: #a71d5d; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; font-size: 12px; line-height: 16.8px; white-space: pre;">for</span><span style="color: #333333; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; font-size: 12px; line-height: 16.8px; white-space: pre;"> ( </span><span class="pl-k" style="box-sizing: border-box; color: #a71d5d; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; font-size: 12px; line-height: 16.8px; white-space: pre;">var</span><span style="color: #333333; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; font-size: 12px; line-height: 16.8px; white-space: pre;"> z</span><span class="pl-k" style="box-sizing: border-box; color: #a71d5d; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; font-size: 12px; line-height: 16.8px; white-space: pre;">=</span> <span class="pl-c1" style="box-sizing: border-box; color: #0086b3; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; font-size: 12px; line-height: 16.8px; white-space: pre;">100</span><span style="color: #333333; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; font-size: 12px; line-height: 16.8px; white-space: pre;">; z </span><span class="pl-k" style="box-sizing: border-box; color: #a71d5d; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; font-size: 12px; line-height: 16.8px; white-space: pre;">&gt;</span> <span class="pl-k" style="box-sizing: border-box; color: #a71d5d; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; font-size: 12px; line-height: 16.8px; white-space: pre;">-</span><span class="pl-c1" style="box-sizing: border-box; color: #0086b3; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; font-size: 12px; line-height: 16.8px; white-space: pre;">200</span><span style="color: #333333; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; font-size: 12px; line-height: 16.8px; white-space: pre;">; z</span><span class="pl-k" style="box-sizing: border-box; color: #a71d5d; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; font-size: 12px; line-height: 16.8px; white-space: pre;">-=</span><span class="pl-c1" style="box-sizing: border-box; color: #0086b3; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; font-size: 12px; line-height: 16.8px; white-space: pre;">100</span><span style="color: #333333; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; font-size: 12px; line-height: 16.8px; white-space: pre;"> )</span></p>
+<p><span style="color: #4d4d4d; font-family: Merriweather, serif;"><span style="font-size: 16px; line-height: 28px;">Consider that our camera is intially positioned at z=5, and our 3 tiles are 100 x 100.&nbsp;With this in mind, we'll place the first tile behind the camera at z=100, then the second one will be 100 in front (the height of the tile), and the third further away from the camera at z = -200. That's all created with the for loop. Apart from that, our code is pretty much the same as the original addGround() function from the <a title="threejs terrain" href="../../writings/post/seeing-sounds-part-4-animating-a-terrain-with-threejs">previous tutorial</a>.</span></span></p>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; font-family: Merriweather, serif; line-height: 28px; color: #4d4d4d; font-size: 16px; border-radius: 0px !important;">We can create an initial for loop starting at 100, moving to -200. &nbsp;</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">    /**
+     * createTerrainMatrix
+     * @TODO: create the matrix of terrains - need to add 9 bits of terrain
+     */
+    createTerrainMatrix:function(scene, perlinNoise){
+
+        //every 100px on the z axis, add a bit of ground
+        for ( var z= 100; z &gt; -200; z-=100 ) {
+
+          //Create the perlin noise for the surface of the ground
+  	      var perlinSurface = new PerlinSurface(perlinNoise, 100, 100);
+          var ground = perlinSurface.surface;
+          //rotate 90 degrees around the xaxis so we can see the terrain
+          ground.rotation.x = -Math.PI/-2;
+          // Then set the z position to where it is in the loop (distance of camera)
+          ground.position.z = z;
+          ground.position.y -=4;
+
+          //add the ground to the scene
+          scene.add(ground);
+          //finally push it to the floor array
+          this.floor.push(ground);
+        }
+
+    }</pre>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; font-family: Merriweather, serif; line-height: 28px; color: #4d4d4d; font-size: 16px; border-radius: 0px !important;">Overall, this will create three pieces of terrain, and in the final line, push them to a floor array, which will be used in the next step.</p>
+<hr style="box-sizing: content-box; height: 0px; margin-top: 20px; margin-bottom: 20px; border-right-width: 0px; border-bottom-width: 0px; border-left-width: 0px; border-top-style: solid; border-top-color: #eeeeee; color: #333333; font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; line-height: 20px; border-radius: 0px !important;" />
+<h3 style="box-sizing: border-box; font-family: 'Merriweather Sans', sans-serif; line-height: 1.3; color: #4d4d4d; margin-top: 20px; margin-bottom: 10px; font-size: 24px; border-radius: 0px !important;">Step 2: Moving forwards</h3>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; font-family: Merriweather, serif; line-height: 28px; color: #4d4d4d; font-size: 16px; border-radius: 0px !important;">When the camera moves forwards, move the tile from the back to the very front, keeping the camera on the centre tile.</p>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; font-family: Merriweather, serif; line-height: 28px; color: #4d4d4d; font-size: 16px; border-radius: 0px !important;"><iframe style="box-sizing: border-box; border-radius: 0px !important; max-width: 100%;" src="https://www.youtube.com/embed/Wh-LpGSnnl8" width="359" height="202" frameborder="0" allowfullscreen="allowfullscreen"></iframe></p>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; font-family: Merriweather, serif; line-height: 28px; color: #4d4d4d; font-size: 16px; border-radius: 0px !important;">We can create this effect in a new function, moveWithCamera():</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">    /**
+     * moveWithCamera
+     * when the camera gets past the first terrain, put the other in front of it
+     */
+     moveWithCamera(camera){
+        // loop through each of the 3 floors
+        for(var i=0; i&lt;this.floor.length; i++) {
+
+          //if the camera has moved past the entire square, move the square
+          if((this.floor[i].position.z - 100)&gt;camera.position.z){
+
+            this.floor[i].position.z-=200;
+          }
+
+        }</pre>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; font-family: Merriweather, serif; line-height: 28px; color: #4d4d4d; font-size: 16px; border-radius: 0px !important;">This is fairly simple - it's a modification of&nbsp;<a title="animating a terrain" href="../../writings/post/seeing-sounds-part-4-animating-a-terrain-with-threejs">Step 3 in the previous animating terrain tutorial</a>, although we've put it into it's own function. The key part is again another for loop.</p>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; font-family: Merriweather, serif; line-height: 28px; color: #4d4d4d; font-size: 16px; border-radius: 0px !important;">This time we're looping through the array of tiles we created at the end of step 1, and checking if the camera has moved past the square by comparing z positions. If the camera's z position has a greater negative value than the tile, we move that tile&nbsp;forward (into the screen, and away from the camera) two times it's height so that it goes from the very back to the front.&nbsp;</p>
+<hr />
+<h3 style="box-sizing: border-box; font-family: 'Merriweather Sans', sans-serif; line-height: 1.3; color: #4d4d4d; margin-top: 20px; margin-bottom: 10px; font-size: 24px; border-radius: 0px !important;">Step 3: Moving backwards</h3>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; font-family: Merriweather, serif; line-height: 28px; color: #4d4d4d; font-size: 16px; border-radius: 0px !important;">The same way we move forward can be applied in reverse to allow us to move backwards. To do this, update&nbsp;<code>moveWithCamera()</code> to include the following code, just underneath the first z position comparison where we were moving the tiles forward:</p>
+<pre class="brush:js;auto-links:false;toolbar:false">//if the camera has moved past the entire square in the opposite direction, move the square the opposite way
+          else if((this.floor[i].position.z + this.tileHeight)&lt;camera.position.z){
+
+            this.floor[i].position.z+=(this.tileHeight*2);
+          }</pre>
+<hr />
+<h3>Well done</h3>
+<p>At this point you should have three tiles of terrain that you can move forwards and backwards along, but not left and right. <a title="Infinite threejs terrain part 2" href="../../writings/post/coding-an-infinite-3d-world-with-threejs-part-2">Part 2</a>&nbsp;will look at adding two more columns, and implementing the ability to move across the x axis infinitely, the same way we have done here with the z axis.</p>
+<p style="box-sizing: border-box; margin-right: 0px; margin-bottom: 10px; margin-left: 0px; font-family: Merriweather, serif; line-height: 28px; color: #4d4d4d; font-size: 16px; border-radius: 0px !important;">&nbsp;</p>
