@@ -1,0 +1,71 @@
+<p>This tutorial is part of the "<a title="Seeing sounds with three.js" href="../../projects/post/seeing-sounds-with-threejs" target="_blank">Seeing Sounds with Three.JS</a>" tutorial series. In this part we will be getting started with the web audio API to add music to an&nbsp;existing scene.</p>
+<p>We're building on the previous part of this series where we <a title="Creating a terrain in three.js" href="../../writings/post/seeing-sounds-part-2-creating-the-terrain" target="_blank">created a terrain</a>. The purpose is&nbsp;to get that terrain moving to the beat of any chosen&nbsp;music track, so it looks like the floor is jumping.</p>
+<p>However before that can be done, we first need to analyse the chosen sound file and&nbsp;detect the beat- and that is what we will do in this tutorial by creating an audio analyser object. The audioAnalyser will allow us to detect the beat of the music to be used in&nbsp;the next tutorial which will look at using that beat to move&nbsp;our terrain. &nbsp;</p>
+<hr />
+<h3>The Audio Analyser</h3>
+<p>The final audioAnalyser script&nbsp;we're create can be seen here:&nbsp;</p>
+<p><a class="btn btn-success" href="https://gist.github.com/GraemeFulton/45ae4291b778702fce44" target="_blank">View on Github</a></p>
+<h4>Overview</h4>
+<p>Overall the audioAnalyser consists of a constructor, and 5 functions:</p>
+<ul>
+<li>constructor - sets up the objects main properties, such as the sound track.</li>
+<li>loadAudio() - this does what you expect</li>
+<li>decodeAudio() - once the audio is loaded, it needs to be decoded.</li>
+<li>setUpAnalyser() - sets up everything needed to analyse the music</li>
+<li>analyseBoost() - finds the beat</li>
+<li>play() - call this to start everything off</li>
+</ul>
+<h4>Usage</h4>
+<p>You can use the audio analyser like this:</p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">//create an instance (providing your sound file path)
+var audioAnalyser = new AudioAnalyser('objects/audio/music.mp3');
+
+//play music
+audioAnalyser.play();</pre>
+<hr />
+<h3>How it works</h3>
+<h4>The Audio Context</h4>
+<p>When instantiating the audioAnalyser,&nbsp;a number of things are set up in the constructor. The main parts are the creation of an Audio Context, the Buffer Source, and the XMLHttpRequest:</p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">//create audio context
+this.audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+//create buffer source
+this.source = this.audioCtx.createBufferSource();
+
+//create XMLHttpRequest
+this.request = new XMLHttpRequest();</pre>
+<p>The Audio Context is used to manage the sound passed into the constructor, and also to play it. All the functionality&nbsp;we need to analyse our music is provided by the Audio Context, such as decoding the music.&nbsp;</p>
+<p>A Buffer Source is then created from the Audio Context through calling <code>audioCtx.createBufferSource();</code>&nbsp;</p>
+<p>The XMLHttpRequest property is used for fetching the sound from the filepath.</p>
+<h4>The Audio Buffer</h4>
+<p>Calling<code>&nbsp;audioAnalyser.play()</code>&nbsp;starts everything off by triggering <code>loadAudio()</code>, which uses the request property created in the consturctor to load our sound (as seen in line 3) :</p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false"> loadAudio:function(){
+
+        this.request.open('GET', this.sound, true);
+        this.request.responseType = 'arraybuffer';
+
+        var audioAnalyserInstance = this;
+        //on load decode the audio
+        this.request.onload = function() {
+          audioAnalyserInstance.decodeAudio();
+        }
+
+        //then send the request
+        this.request.send();
+
+    }</pre>
+<p>Line 4 then sets a response type of arraybuffer for loading the sound. This arraybuffer then becomes&nbsp;part of our request object, and is used to decode the audio. That happens in line 9, where we call decodeAudio();</p>
+<h3>Decode the Audio</h3>
+<p>Here, we again use the Audio Context's (this.audioCtx) decodeAudioData function, using our request object as a parameter so that we can access the arraybuffer which it holds (line 4):&nbsp;</p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">decodeAudio:function(){
+
+        var audioAnalyserInstance = this;
+        this.audioCtx.decodeAudioData(this.request.response, function(decodedData) {
+
+            audioAnalyserInstance.setUpAnalyser(decodedData);
+        },
+        function(e){"Error with decoding audio data" + e.err});
+    }</pre>
+<p>The decodeAudioData also has a callback function as the second parameter (line 4), which simply calls the setUpAnalyser function of our audioAnalyser (line 6).</p>
+<h3>That's all for now</h3>
+<p>That's enough for one tutorial. In the next part, we'll look at the last section&nbsp;of the audioAnalyser code, and find out how an&nbsp;the audio context's&nbsp;<span style="color: #333333; font-family: Consolas, 'Liberation Mono', Menlo, Courier, monospace; font-size: 12px; line-height: 16.8px; white-space: pre;">createAnalyser</span>&nbsp;function can be used to analyse the beat.</p>

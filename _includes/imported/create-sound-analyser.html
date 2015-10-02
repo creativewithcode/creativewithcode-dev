@@ -1,0 +1,82 @@
+<p>We left off having loaded the audio using the analyseAudio object. Now we're going to explore the <code>setUpAnalyser()</code> function which will starts off&nbsp;the sound analysing process. <code>setUpAnalyser</code>&nbsp;sets up everything we need to analyse the music:</p>
+<ul>
+<li>it creates a separate processor node required for the analysis&nbsp;</li>
+<li>sets up the sound&nbsp;buffer for playing the track, and also loops the song</li>
+<li>makes sure the analyseBoost function is called when the track is playing</li>
+</ul>
+<hr />
+<h3>Overview</h3>
+<p>There's 4 steps to this tutorial:</p>
+<ul>
+<li>Step 1 will create a processor node used for processing music</li>
+<li>Step 2 creates the sound analyser</li>
+<li>Step 3 uses the sound buffer to play the music</li>
+<li>Step 4 calls makes sure the sound is analysed when processed</li>
+</ul>
+<hr />
+<h4>Step 1: What is a script processor node?</h4>
+<p>The first thing to do is create a script processor which is used for direct audio processing in JavaScript. To create the processor node, audio context has a handy function: <code>createScriptProcessor(bufferSize, numberOfInputChannels, numberOfOutputChannels);</code>&nbsp;. I have used it as follows:</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">var scriptProcessorNode = this.audioCtx.createScriptProcessor(2048, 1, 1);
+</pre>
+<p>&nbsp;We then set the processor node's buffer to the one passed into the setUpAnalyser function, and connect it using audio context's destination property:</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">//set buffer
+scriptProcessorNode.buffer = buffer;
+//connect
+scriptProcessorNode.connect(this.audioCtx.destination);</pre>
+<hr />
+<h4>Step 2: Create the sound analyser using Audio Context</h4>
+<p>Actually creating the analyser is very simple. We just use the audio context's <code>createAnalyser()</code> function (line 2). After that, we set a few of the analyser's properties:</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">//create analyser
+this.analyser = this.audioCtx.createAnalyser();
+//set analyser properties
+this.analyser.smoothingTimeConstant = 0.6;
+this.analyser.fftSize = 512;
+this.analyser.connect(scriptProcessorNodes);</pre>
+<hr />
+<h4>Step 3: The source buffer lets the music play</h4>
+<p>Next, we make use of our original source buffer, which had previously been instantiated in the constructor like so:</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">this.source = this.audioCtx.createBufferSource();</pre>
+<p>The source property is used to play the music, so we set it's buffer property, and connect it using the audio context destination (just like with the processor node). Additionally, we can set the loop property to true so that the song repeats instead of stopping at the end:</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">//set buffer
+this.source.buffer = buffer;
+//connect
+this.source.connect(this.audioCtx.destination);
+//set looping
+this.source.loop = true;
+//connect using analyser
+this.source.connect(this.analyser);</pre>
+<hr />
+<h4>Step 4: The last step :)</h4>
+<p>The final&nbsp;part of this function triggers&nbsp;<code>analyseBoost()</code>, which is used to analyse the track whilst&nbsp;it plays:</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">scriptProcessorNode.onaudioprocess = function(e) {
+              audioAnalyserInstance.analyseBoost();
+           }</pre>
+<hr />
+<h3>Overall</h3>
+<p>The overall function should look like this:</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">setUpAnalyser:function(buffer){
+
+         var audioAnalyserInstance = this;
+         var scriptProcessorNode = this.audioCtx.createScriptProcessor(2048, 1, 1);
+          scriptProcessorNode.buffer = buffer;
+          scriptProcessorNode.connect(this.audioCtx.destination);
+
+          this.analyser = this.audioCtx.createAnalyser();
+          this.analyser.smoothingTimeConstant = 0.6;
+          this.analyser.fftSize = 512;
+          this.analyser.connect(scriptProcessorNodes);
+
+          this.source.buffer = buffer;
+          this.source.connect(this.audioCtx.destination);
+          this.source.loop = true;
+          this.source.connect(this.analyser);
+
+          scriptProcessorNode.onaudioprocess = function(e) {
+              audioAnalyserInstance.analyseBoost();
+           }
+
+
+    }</pre>
+<hr />
+<h3>Nice one.</h3>
+<p>The next part of this series will use the analyser created in this tutorial to detect the beat of the music.&nbsp;</p>
