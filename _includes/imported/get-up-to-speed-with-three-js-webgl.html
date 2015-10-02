@@ -1,0 +1,153 @@
+<h4>Introduction</h4>
+<p>If you imagine a film set, there's a guy pointing a camera at a scene of different props, and he can do so from different angles. It's all pretty similar in three.js, which is made up of objects that make coding 3D experiences much more natural to us. For example, three of the tools we have at our disposal when using three.js are below:</p>
+<ol>
+<li>&nbsp;Scene - this contains all the 3D object data (all the props)</li>
+<li>&nbsp;Camera - this has a field of view, position and rotation</li>
+<li>&nbsp;Renderer - this figures out what objects look like from the camera's point of view</li>
+</ol>
+<p>Three.js&nbsp;<a href="#">simplifies WebGL</a>, enabling us to use simple concepts such as those above to produce 3D experiences with minimal code. The same would have required hundreds of lines of JavaScript when using WebGL directly.</p>
+<p>In this tutorial, we'll be setting up the three.js environment in step 1, then using the Scene, Camera and Renderer objects listed above, getting an understanding of each in step 2. In the final step 3, we'll add an animating cube to the scene we've created.</p>
+<h4>The Outcome</h4>
+<p>Here's what we'll end up with - if you just want the code you can grab it from the codepen below or&nbsp;<a title="github repo" href="https://github.com/GraemeFulton/threejs-starter" target="_blank">github</a>. Otherwise, to learn about what's going on, continue reading from step 1.</p>
+<p><iframe style="width: 100%;" src="//codepen.io/GraemeFulton/embed/zGxKKM/?height=319&amp;theme-id=0" width="300" height="319" frameborder="no" scrolling="no" allowfullscreen="allowfullscreen">See the Pen <a href="http://codepen.io/GraemeFulton/pen/zGxKKM/">Three.js starter</a> by Graeme Fulton (<a href="http://codepen.io/GraemeFulton">@GraemeFulton</a>) on <a href="http://codepen.io">CodePen</a>.</iframe></p>
+<hr />
+<h3>Step 1: Download three.js &amp; setup the HTML project</h3>
+<h4>Download three.js</h4>
+<p>First, get a copy of three.js from its&nbsp;<a title="three.js repo" href="https://github.com/mrdoob/three.js/" target="_blank">GitHub repository</a>, and save it locally.</p>
+<p>The reason I'm storing this locally is to prevent the applicaiton breaking if a different release of three.js is used. The latest version at the time of this tutorial was revision 71, so you should use r71 if you're having any issues.&nbsp;</p>
+<p>Apart from three.js, we're just going to be coding everything else within a single HTML file for simplicity.</p>
+<h4>Create the HTML project file</h4>
+<p>All we're doing below is including our local three.js library, and opening some script tags where most of the code will go.</p>
+<pre class="brush:html;auto-links:false;toolbar:false" contenteditable="false">&lt;!doctype html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;title&gt;Three.js Tutorial&lt;/title&gt;
+  &lt;meta charset="utf-8"&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+  &lt;script src="three.js"&gt;&lt;/script&gt;
+
+  &lt;script&gt;
+
+    //code will go here...
+
+  &lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+<hr />
+<h3>Step 2: Create a Scene, Camera and Renderer</h3>
+<p><img src="../../post/multiple/265233f196dc716fbc261bfeab7c7a55.jpg" alt="" width="499" height="332" /></p>
+<p>Now, we'll declare 3 global variables, and assign each of them with a three.js object. First we'll create a Scene, then add a Camera, followed by the Renderer.</p>
+<h4>Create the Scene</h4>
+<p>The scene is really simple:</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">//declare scene variable
+var scene;
+
+//create the scene
+scene = new THREE.Scene();</pre>
+<h4>Add the Camera</h4>
+<p>To add the camera, we assign a PerspectiveCamera object to a camera variable. There's a few different other camera options, but we'll use the PerspectiveCamera above:</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">//declare camera variable
+var camera;
+
+//assign three.js perspective camera to variable
+camera = new THREE.PerspectiveCamera(75, window.innerWidth/ window.innerHeight, 0.1, 1000);</pre>
+<p>Let's step through the arguments provided to the PerspectiveCamera:</p>
+<ul>
+<li>The first argument we have provided, <code>75</code>, is the field of view for the camera.</li>
+<li>Second, <code>window.innerWidth/ window.innerHeight</code> is the aspect ratio.</li>
+<li>The final two arguments are the clipping plane for far and near.</li>
+</ul>
+<h4>Add the Renderer</h4>
+<p>For rendering, we'll use the WebGLRenderer object, which will display our scene using WebGL. Alternatively, canvasRenderer() could have been used, which uses the canvas element - it's a good fallback for when WebGL is not available.</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">//declare renderer variable
+var renderer;
+
+//assign WebGL renderer object
+renderer = new THREE.WebGLRenderer();
+
+//set the size of the renderer
+renderer.setSize( window.innerWidth, window.innerHeight );
+
+//add the renderer to the html document body element
+document.body.appendChild( renderer.domElement );</pre>
+<h4>Bring it all together</h4>
+<p>You can then combine all of the above code into something more manageable as seen in the snippet below. The variables are declared globally, and then we have an <code>init()</code> function, which we call at the bottom to build our scene.</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">    //Declare three.js variables
+	var camera, scene, renderer;
+
+	//assign three.js objects to each variable
+	function init(){
+
+		//camera
+		camera = new THREE.PerspectiveCamera( 75, window.innerWidth / window.innerHeight, 0.1, 1000 );
+
+		//scene
+		scene = new THREE.Scene();
+
+		//renderer
+		renderer = new THREE.WebGLRenderer();
+		//set the size of the renderer
+		renderer.setSize( window.innerWidth, window.innerHeight );
+
+		//add the renderer to the html document body
+		document.body.appendChild( renderer.domElement );
+
+
+	}</pre>
+<p>At this point, you still won't actually see anything if you run the code as there's nothing on the scene, and it isn't actually rendered. So let's fix that in the next step:</p>
+<hr />
+<h3>Step 3: Rendering a cube onto the scene</h3>
+<p><img src="../../post/multiple/b4741ee70a6aa05d208d60d82548e076.png" alt="" width="500" height="349" /></p>
+<p>In this step, we'll first create a cube and add it to our scene, and then create a rendering loop which will run our scene.</p>
+<h4>Create the Cube</h4>
+<p>First, we declare the cube variable globally, so it can be used in other methods if necessary, then create the cube within an <code>addCube</code> function. To do this, we use <code>BoxGeometry</code> to create a geometry object, then create some material with a colour, and then <code>Mesh</code> them together to create to cube. After we add the cube to the scene, we have to set the camera position so that the cube becomes visible.</p>
+<p>If that sounded complicated, it's actually really simple if you look at it line by line:</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">var cube;
+
+function addCube(){
+
+		//create box geometry object
+		var geometry = new THREE.BoxGeometry( 1, 1, 1 );
+		//create material with colour
+		var material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+		//combine geometry with material to create the cube
+		cube = new THREE.Mesh( geometry, material );
+		//add the cube to the scene
+		scene.add( cube );
+
+		//set the camera position
+		camera.position.z = 5;
+	}</pre>
+<h4>Render the scene</h4>
+<p>Here, we define a <code>render()</code> function, which basically acts as a loop, firing 60 times a second:</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">	function render() {
+		//get the frame
+		requestAnimationFrame( render );
+		//render the scene
+		renderer.render( scene, camera );
+	}</pre>
+<p>Now to run all of this, just add the following to the bottom of your script:</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">	init();
+	addCube();
+	render();</pre>
+<h4>Animate the cube</h4>
+<p>To demonstrate how this render loop is actually working, we can animate the cube just by adding a couple lines within the render function:</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">	function render() {
+		//get the frame
+		requestAnimationFrame( render );
+
+		//animate the cube
+		cube.rotation.x += 0.1;
+		cube.rotation.y += 0.1;
+
+
+		//render the scene
+		renderer.render( scene, camera );
+	}</pre>
+<p>Because the render function acts in a loop, it adds 0.1 to the x and y rotations of the cube 60 times a second, creating a rotating animation.</p>
+<hr />
+<h3>Well done</h3>
+<p>Good work, you've learned some of the very basics of three.js. I'll be adding a new tutorial to further manipulate the cube in the future.</p>

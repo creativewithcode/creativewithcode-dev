@@ -1,0 +1,149 @@
+<p>This tutorial assumes you have a basic knowledge of three.js, and know how to set up a very simple scene using the three.js renderer and camera. If you don't, then first have a look at my <a href="#">getting started guide here</a>.</p>
+<p>In this part, we're going to get more familiar with three.js by building a star field. The field is essentially an array of moving spheres, so the best place to start is by creating a just single sphere. Once we've created our first star, we can just replicate it to create a whole field of them, followed by adding some movement. Here is the outcome of this part of the Seeing Sounds series:</p>
+<p><iframe style="width: 100%;" src="//codepen.io/GraemeFulton/embed/BNyQMM/?height=268&amp;theme-id=0" width="300" height="268" frameborder="no" scrolling="no" allowfullscreen="allowfullscreen">See the Pen <a href="http://codepen.io/GraemeFulton/pen/BNyQMM/">Three.js - Star field</a> by Graeme Fulton (<a href="http://codepen.io/GraemeFulton">@GraemeFulton</a>) on <a href="http://codepen.io">CodePen</a>.</iframe></p>
+<p>To get started, all you'll need is a local copy of three.js, which you can get from its <a title="three.js repo" href="https://github.com/mrdoob/three.js/" target="_blank">GitHub repository</a>, and we'll then code everything else within a single HTML file for simplicity.</p>
+<h3>Step 1: Create a single sphere</h3>
+<p>We're going to jump straight into the code now.</p>
+<h4>Create the HTML project file</h4>
+<p>The snippet below shows our main HTML project file, with a space for adding our single sphere:</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">&lt;!doctype html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;title&gt;Starfield Tutorial&lt;/title&gt;
+  &lt;meta charset="utf-8"&gt;
+&lt;/head&gt;
+&lt;body style="margin:0px;"&gt;
+
+  &lt;script src="/Stars/three.js"&gt;&lt;/script&gt;
+
+  &lt;script&gt;
+
+    //Sphere code will go here
+
+  &lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+<h4>Add the sphere</h4>
+<p>Between the script tags above (where it says "Sphere code will go here"), add the following code which will set up a basic three.js scene, and render a sphere on it. For more detailed instructions on how this is achieved, follow <a href="#">this tutorial</a> I made earler, which has very similar code for adding a cube rather than a sphere.</p>
+<p>Here's what you'll get at the end of this step:</p>
+<p><iframe style="width: 100%;" src="//codepen.io/GraemeFulton/embed/VLYmmb/?height=268&amp;theme-id=0" width="300" height="268" frameborder="no" scrolling="no" allowfullscreen="allowfullscreen">See the Pen <a href="http://codepen.io/GraemeFulton/pen/VLYmmb/">Three.js Sphere</a> by Graeme Fulton (<a href="http://codepen.io/GraemeFulton">@GraemeFulton</a>) on <a href="http://codepen.io">CodePen</a>.</iframe></p>
+<h5>Code to add:</h5>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">&lt;!doctype html&gt;
+&lt;html lang="en"&gt;
+&lt;head&gt;
+  &lt;title&gt;Starfield Tutorial&lt;/title&gt;
+  &lt;meta charset="utf-8"&gt;
+&lt;/head&gt;
+&lt;body style="margin:0px;"&gt;
+
+  &lt;script src="/Stars/three.js"&gt;&lt;/script&gt;
+
+  &lt;script&gt;
+
+    //Declare three.js variables
+	var camera, scene, renderer, sphere;
+
+	//assign three.js objects to each variable
+	function init(){
+
+		//camera
+		camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 1, 1000);
+		camera.position.z = 5;
+
+		//scene
+		scene = new THREE.Scene();
+
+		//renderer
+		renderer = new THREE.WebGLRenderer();
+		//set the size of the renderer
+		renderer.setSize( window.innerWidth, window.innerHeight );
+
+		//add the renderer to the html document body
+		document.body.appendChild( renderer.domElement );
+	}
+
+
+	function addSphere(){
+		// Create a sphere to make visualization easier.
+		var geometry   = new THREE.SphereGeometry(0.5, 32, 32)
+		var material = new THREE.MeshBasicMaterial( {color: 0xffffff} );
+		sphere = new THREE.Mesh(geometry, material)
+		scene.add(sphere)
+
+
+	}
+
+	function render() {
+		//get the frame
+		requestAnimationFrame( render );
+
+		//render the scene
+		renderer.render( scene, camera );
+	}
+
+	init();
+	addSphere();
+	render();
+
+  &lt;/script&gt;
+
+&lt;/body&gt;
+&lt;/html&gt;</pre>
+<h3>Step 2: Create a stars array</h3>
+<p>Now instead of having just one sphere, in this step we're going to create a load of them to produce this:</p>
+<p><iframe style="width: 100%;" src="//codepen.io/GraemeFulton/embed/mJyOzK/?height=268&amp;theme-id=0" width="300" height="268" frameborder="no" scrolling="no" allowfullscreen="allowfullscreen">See the Pen <a href="http://codepen.io/GraemeFulton/pen/mJyOzK/">Three.js - Stars array</a> by Graeme Fulton (<a href="http://codepen.io/GraemeFulton">@GraemeFulton</a>) on <a href="http://codepen.io">CodePen</a>.</iframe></p>
+<p>If you look at line 14 of the code snippet of the previous step, you'll see we declared a 'sphere' variable. To start with, we need to change this to a 'stars' array for holding many spheres, so line 14 becomes:</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">//Declare three.js variables
+var camera, scene, renderer, stars=[];</pre>
+<p>The next bit we need to change is the <code>addSphere</code> function (line 36). Since we already know how to add one sphere, we just need to do this multiple times, and add each one to a stars array - we'll do this inside a for loop:</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">	function addSphere(){
+
+				// The loop will move from z position of -1000 to z position 1000, adding a random particle at each position.
+				for ( var z= -1000; z &lt; 1000; z+=20 ) {
+
+					// Make a sphere (exactly the same as before).
+					var geometry   = new THREE.SphereGeometry(0.5, 32, 32)
+					var material = new THREE.MeshBasicMaterial( {color: 0xffffff} );
+					var sphere = new THREE.Mesh(geometry, material)
+
+					// This time we give the sphere random x and y positions between -500 and 500
+					sphere.position.x = Math.random() * 1000 - 500;
+					sphere.position.y = Math.random() * 1000 - 500;
+
+					// Then set the z position to where it is in the loop (distance of camera)
+					sphere.position.z = z;
+
+					// scale it up a bit
+					sphere.scale.x = sphere.scale.y = 2;
+
+					//add the sphere to the scene
+					scene.add( sphere );
+
+					//finally push it to the stars array
+					stars.push(sphere);
+				}
+	}</pre>
+<p>As seen above, the <code>addSphere</code> function has only changed a little from what it was before. We first add a <code>for</code> loop to move the z position of the camera from -1000 to 1000 (line 4). Then, within the loop we use the exact same code as before to create a sphere, but this time we don't add it to the scene straight away (lines 7-9). Instead, a random x and y position is added to the sphere, and it's z position is then set based on where we are in the overall loop (lines 12-16).</p>
+<p>Finally, the sphere is scaled up slightly so we can see it better (line 19), and then added to the scene, and to the stars array (lines 22 and 25).</p>
+<h3>Step 3: Animate the star field</h3>
+<p>This is the final step, and all done by adding one suprisingly simple function, which we'll call <code>animateStars</code>:</p>
+<pre class="brush:js;auto-links:false;toolbar:false" contenteditable="false">	function animateStars() {
+
+		// loop through each star
+		for(var i=0; i&lt;stars.length; i++) {
+
+			star = stars[i];
+
+			// move it forward by a 10th of its array position each time
+			star.position.z +=  i/10;
+
+			// once the star is too close, reset its z position
+			if(star.position.z&gt;1000) star.position.z-=2000;
+		}
+	}</pre>
+<p>Here, we are iterating through every star in the stars array (line 4), and simply incrementing the z position (distance from the camera) of the star (line 9). Once the star is too close to the camera, we simply reset its z position so it starts moving forward again from the back (line 12).</p>
+<h3>Well done</h3>
+<p>At this point, you should have created the star field as shown in the demo at the top of this tutorial.</p>
+<p>The final source code is available <a href="https://github.com/GraemeFulton/threejs-starter/blob/master/Starfield.html" target="_blank">here on Github</a>.</p>
+<p>The next tutorial in this series will look into creating the terrain at the bottom of the visualization.</p>
