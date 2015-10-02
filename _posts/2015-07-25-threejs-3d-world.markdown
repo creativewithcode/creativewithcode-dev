@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Creating an infinitely open 3D world with three.js"
+title:  "Create an infinitely open 3D world with three.js"
 date:   2015-07-25 11:34:20
 categories: ThreeJS
 author: Graeme Fulton
