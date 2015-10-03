@@ -38,7 +38,7 @@
 &lt;/html&gt;</pre>
 <hr />
 <h3>Step 2: Create a Scene, Camera and Renderer</h3>
-<p><img src="../../post/multiple/265233f196dc716fbc261bfeab7c7a55.jpg" alt="" width="499" height="332" /></p>
+<p><img src="/img/camera-man.jpg" alt="" width="499" height="332" /></p>
 <p>Now, we'll declare 3 global variables, and assign each of them with a three.js object. First we'll create a Scene, then add a Camera, followed by the Renderer.</p>
 <h4>Create the Scene</h4>
 <p>The scene is really simple:</p>
@@ -100,7 +100,7 @@ document.body.appendChild( renderer.domElement );</pre>
 <p>At this point, you still won't actually see anything if you run the code as there's nothing on the scene, and it isn't actually rendered. So let's fix that in the next step:</p>
 <hr />
 <h3>Step 3: Rendering a cube onto the scene</h3>
-<p><img src="../../post/multiple/b4741ee70a6aa05d208d60d82548e076.png" alt="" width="500" height="349" /></p>
+<p><img src="/img/cube.png" alt="" width="500" height="349" /></p>
 <p>In this step, we'll first create a cube and add it to our scene, and then create a rendering loop which will run our scene.</p>
 <h4>Create the Cube</h4>
 <p>First, we declare the cube variable globally, so it can be used in other methods if necessary, then create the cube within an <code>addCube</code> function. To do this, we use <code>BoxGeometry</code> to create a geometry object, then create some material with a colour, and then <code>Mesh</code> them together to create to cube. After we add the cube to the scene, we have to set the camera position so that the cube becomes visible.</p>
