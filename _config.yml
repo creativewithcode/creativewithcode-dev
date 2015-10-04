@@ -28,3 +28,16 @@ more_vert:
 
 # Build settings
 markdown: kramdown
+
+# Gems
+gems:
+  - jekyll-archives
+
+#jekyll archives
+jekyll-archives:
+  enabled:
+    - categories
+    - posts
+  layout: 'archive'
+  permalinks:
+    category: '/category/:name/'
