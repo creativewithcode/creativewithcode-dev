@@ -1,102 +1,488 @@
 ---
-layout: default
+layout: home
 ---
-<div class="page-content">
-  <div class="mdl-grid">
-  {% if site.post_type == 'highlight' %}
+      <!-- Page styles -->
+      <link rel="stylesheet" href="styles.css">
+      <style>
+      #particle-canvas{
+      	position: absolute!important;
+        top:0;left:0;
+      	width: 100vw;
+      	height: 88vh;
+        z-index:1!important;
+      }
+      .top-section{
+        position:relative;
+        height:88vh;
+      }
+      </style>
 
-    {% for post in site.posts %}
-    {% if post.highlight %}
+        <div class="android-content">
 
-    <div class="section-highlight section--center mdl-grid mdl-grid--no-spacing mdl-shadow--2dp">
+          <a name="top"></a>
+        <section class="top-section">
 
-      <header class="section__play-btn mdl-cell mdl-cell--3-col-desktop mdl-cell--2-col-tablet mdl-cell--4-col-phone" {% if post.image %} style="background: url('{{ post.image }}') center/cover;" {% endif %}></header>
+          <div id="particle-canvas"></div>
 
-      <div class="mdl-card mdl-cell mdl-cell--9-col-desktop mdl-cell--6-col-tablet mdl-cell--4-col-phone">
-        <div class="mdl-card__supporting-text">
-          <h4>{{ post.title }}</h4>
-          {{ post.content | strip_html | truncatewords: 50 }}
+          <div class="android-be-together-section mdl-typography--text-center">
+            <div class="android-font android-slogan">make something. be creative.</div>
+            <div class="android-font android-sub-slogan">welcome to creative with code... be yourself. do your thing. see what's going on.</div>
+
+            <a href="#screens">
+              <button class="android-fab mdl-button mdl-button--colored mdl-js-button mdl-button--fab mdl-js-ripple-effect">
+                <i class="material-icons">expand_more</i>
+              </button>
+            </a>
+          </div>
+        </section>
+
+
+          <div class="android-screen-section mdl-typography--text-center">
+            <a name="screens"></a>
+            <div class="mdl-typography--display-1-color-contrast">Experiment with new technologies.</div>
+            <div class="android-font android-sub-slogan">Get creative with new libraries.</div>
+
+            <div class="android-screens android-more-section">
+              <div class="android-wear android-screen mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-card">
+                <a class="android-image-link" href="">
+                  <img class="android-screen-image" src="img/home/mesh.png">
+                </a>
+                <a class="android-link mdl-typography--font-regular mdl-typography--text-uppercase" href="">Web Graphics</a>
+              </div>
+              <div class="android-phone android-screen mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-card">
+                <a class="android-image-link" href="">
+                  <img class="android-screen-image" src="img/home/js.png">
+                </a>
+                <a class="android-link mdl-typography--font-regular mdl-typography--text-uppercase" href="">Programming</a>
+              </div>
+              <div class="android-tablet android-screen mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-card">
+                <a class="android-image-link" href="">
+                  <img class="android-screen-image" src="img/home/html5audio.jpg">
+                </a>
+                <a class="android-link mdl-typography--font-regular mdl-typography--text-uppercase" href="">Audio</a>
+              </div>
+              <div class="android-tv android-screen mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-card">
+                <a class="android-image-link" href="">
+                  <img class="android-screen-image" src="img/home/material.png">
+                </a>
+                <a class="android-link mdl-typography--font-regular mdl-typography--text-uppercase" href="">Design</a>
+              </div>
+            </div>
+          </div>
+
+
+          <div class="android-wear-section">
+            <div class="android-wear-band">
+              <div class="android-wear-band-text">
+                <div class="mdl-typography--display-2 mdl-typography--font-thin">Find out how to contribute</div>
+                <p class="mdl-typography--headline mdl-typography--font-thin">
+                  Creative with code is a github project.
+                </p>
+                <p>
+                  <a class="mdl-typography--font-regular mdl-typography--text-uppercase android-alt-link" href="">
+                    Read about the project&nbsp;<i class="material-icons">chevron_right</i>
+                  </a>
+                </p>
+              </div>
+            </div>
+          </div>
+
+
+
+          <div class="android-more-section">
+            <div class="android-section-title mdl-typography--display-1-color-contrast">More Posts</div>
+            <div class="android-card-container mdl-grid">
+              <div class="mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-card mdl-shadow--3dp">
+                <div class="mdl-card__media">
+                  <img src="img/js.jpg">
+                </div>
+                <div class="mdl-card__title">
+                   <h4 class="mdl-card__title-text">Object Oriented JavaScript for beginners</h4>
+                </div>
+                <div class="mdl-card__supporting-text">
+                  <span class="mdl-typography--font-light mdl-typography--subhead">Basic introduction to object oriented JavaScript</span>
+                </div>
+                <div class="mdl-card__actions">
+                   <a class="android-link mdl-button mdl-js-button mdl-typography--text-uppercase" href="">
+                     Read now
+                     <i class="material-icons">chevron_right</i>
+                   </a>
+                </div>
+              </div>
+
+              <div class="mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-card mdl-shadow--3dp">
+                <div class="mdl-card__media">
+                  <img src="img/music-viz-2.png">
+                </div>
+                <div class="mdl-card__title">
+                   <h4 class="mdl-card__title-text">Visualize music with the Web Audio API: Getting Started</h4>
+                </div>
+                <div class="mdl-card__supporting-text">
+                  <span class="mdl-typography--font-light mdl-typography--subhead">Web Audio API usage in the wild</span>
+                </div>
+                <div class="mdl-card__actions">
+                   <a class="android-link mdl-button mdl-js-button mdl-typography--text-uppercase" href="">
+                     Read now
+                     <i class="material-icons">chevron_right</i>
+                   </a>
+                </div>
+              </div>
+
+              <div class="mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-card mdl-shadow--3dp">
+                <div class="mdl-card__media">
+                  <img src="http://i0.wp.com/motionographer.com/wp-content/uploads/2014/12/material1.gif?fit=700%2C700">
+                </div>
+                <div class="mdl-card__title">
+                   <h4 class="mdl-card__title-text">Get creative with Google’s material design language</h4>
+                </div>
+                <div class="mdl-card__supporting-text">
+                  <span class="mdl-typography--font-light mdl-typography--subhead">A first look into Google Material Design.</span>
+                </div>
+                <div class="mdl-card__actions">
+                   <a class="android-link mdl-button mdl-js-button mdl-typography--text-uppercase" href="">
+                     Read now
+                     <i class="material-icons">chevron_right</i>
+                   </a>
+                </div>
+              </div>
+
+              <div class="mdl-cell mdl-cell--3-col mdl-cell--4-col-tablet mdl-cell--4-col-phone mdl-card mdl-shadow--3dp">
+                <div class="mdl-card__media">
+                  <img src="img/cube.png">
+                </div>
+                <div class="mdl-card__title">
+                   <h4 class="mdl-card__title-text">Beginners guide to three.js: set your first scene</h4>
+                </div>
+                <div class="mdl-card__supporting-text">
+                  <span class="mdl-typography--font-light mdl-typography--subhead">An introduction to threeJS. Here you'll learn how to create your first threeJS scene whilst learning the basic concepts of threeJS.</span>
+                </div>
+                <div class="mdl-card__actions">
+                   <a class="android-link mdl-button mdl-js-button mdl-typography--text-uppercase" href="">
+                     Find apps
+                     <i class="material-icons">chevron_right</i>
+                   </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+
+
+          <!-- <div class="android-customized-section">
+            <div class="android-customized-section-text">
+              <div class="mdl-typography--font-light mdl-typography--display-1-color-contrast">Featured tutorial series</div>
+              <p class="mdl-typography--font-light">
+                Seeing sounds with ThreeJS: Create a music visualizer using threeJS.
+                <br>
+                <a href="" class="android-link mdl-typography--font-light">Start hacking</a>
+              </p>
+            </div>
+            <div class="android-customized-section-image"></div>
+          </div> -->
+
+
         </div>
-        <div class="mdl-card__actions">
-          <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{ post.url | prepend: site.baseurl }}">Read More</a>
-        </div>
-      </div>
+        <footer class="android-footer mdl-mega-footer">
+          <div class="mdl-mega-footer--top-section">
+            <div class="mdl-mega-footer--left-section">
+              <button class="mdl-mega-footer--social-btn"></button>
+              &nbsp;
+              <button class="mdl-mega-footer--social-btn"></button>
+              &nbsp;
+              <button class="mdl-mega-footer--social-btn"></button>
+            </div>
+            <div class="mdl-mega-footer--right-section">
+              <a class="mdl-typography--font-light" href="#top">
+                Back to Top
+                <i class="material-icons">expand_less</i>
+              </a>
+            </div>
+          </div>
 
-      <button class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon" id="btn-high">
-        <i class="material-icons">more_vert</i>
-      </button>
-      <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="btn-high">
-        <li><a href="https://www.facebook.com/dialog/share?app_id={app_id}&display=page&href={{ post.url | prepend: site.baseurl }}&redirect_uri={{ site.baseurl }}" class="mdl-menu__item">Facebook</a></li>
-        <li><a href="https://twitter.com/share?url={{ post.url | prepend: site.baseurl }}&text={{ post.title }}&via={{ site.twitter_username }}" class="mdl-menu__item">Twitter</a></li>
-        <li><a href="https://plus.google.com/share?url={{ post.url | prepend: site.baseurl }}" class="mdl-menu__item">Google+</a></li>
-      </ul>
+          <div class="mdl-mega-footer--middle-section">
+            <p class="mdl-typography--font-light">Satellite imagery: © 2014 Astrium, DigitalGlobe</p>
+            <p class="mdl-typography--font-light">Some features and devices may not be available in all areas</p>
+          </div>
 
-    </div>
+          <div class="mdl-mega-footer--bottom-section">
+            <a class="android-link android-link-menu mdl-typography--font-light" id="version-dropdown">
+              Versions
+              <i class="material-icons">arrow_drop_up</i>
+            </a>
+            <ul class="mdl-menu mdl-js-menu mdl-menu--top-left mdl-js-ripple-effect" for="version-dropdown">
+              <li class="mdl-menu__item">5.0 Lollipop</li>
+              <li class="mdl-menu__item">4.4 KitKat</li>
+              <li class="mdl-menu__item">4.3 Jelly Bean</li>
+              <li class="mdl-menu__item">Android History</li>
+            </ul>
+            <a class="android-link android-link-menu mdl-typography--font-light" id="developers-dropdown">
+              For Developers
+              <i class="material-icons">arrow_drop_up</i>
+            </a>
+            <ul class="mdl-menu mdl-js-menu mdl-menu--top-left mdl-js-ripple-effect" for="developers-dropdown">
+              <li class="mdl-menu__item">App developer resources</li>
+              <li class="mdl-menu__item">Android Open Source Project</li>
+              <li class="mdl-menu__item">Android SDK</li>
+              <li class="mdl-menu__item">Android for Work</li>
+            </ul>
+            <a class="android-link mdl-typography--font-light" href="">Blog</a>
+            <a class="android-link mdl-typography--font-light" href="">Privacy Policy</a>
+          </div>
 
-    {% else %}
+        </footer>
+      </div>
+      <script>
+      // Create Particle class
+      var Particle = function(parent) {
 
-    <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--4-col-desktop mdl-cell--4-col-tablet  mdl-cell--12-col-phone">
-      <div class="mdl-card__title" {% if post.image %} style="background: url('{{ post.image }}') center/cover;" {% endif %}>
-        <h2 class="mdl-card__title-text">{{ post.title }}</h2>
-      </div>
-      <div class="mdl-card__supporting-text">
-        {{ post.content | strip_html | truncatewords: 40 }}
-      </div>
-      <button class="post-button mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" onclick="location.href='{{ post.url | prepend: site.baseurl }}'">
-        <i class="material-icons">keyboard_arrow_right</i>
-      </button>
-      <div class="mdl-card__actions mdl-card--border">
-        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{ post.url | prepend: site.baseurl }}">
-          {{ post.date | date: "%b %-d, %Y" }}
-        </a>
-      </div>
-      <div class="mdl-card__menu">
-        <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="post-{{ post.id }}">
-          <i class="material-icons">share</i>
-        </button>
-        <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="post-{{ post.id }}">
-          <li><a href="https://www.facebook.com/dialog/share?app_id={app_id}&display=page&href={{ post.url | prepend: site.baseurl }}&redirect_uri={{ site.baseurl }}" class="mdl-menu__item">Facebook</a></li>
-          <li><a href="https://twitter.com/share?url={{ post.url | prepend: site.baseurl }}&text={{ post.title }}&via={{ site.twitter_username }}" class="mdl-menu__item">Twitter</a></li>
-          <li><a href="https://plus.google.com/share?url={{ post.url | prepend: site.baseurl }}" class="mdl-menu__item">Google+</a></li>
-        </ul>
-      </div>
-    </div>
-    {% endif %}
-    {% endfor %}
+        this.canvas = parent.canvas;
+        this.ctx = parent.ctx;
+        this.particleColor = parent.options.particleColor;
 
-  {% else %}
+        this.x = Math.random() * this.canvas.width;
+        this.y = Math.random() * this.canvas.height;
+        this.velocity = {
+          x: (Math.random() - 0.5) * parent.options.velocity,
+          y: (Math.random() - 0.5) * parent.options.velocity
+        };
+      };
+      Particle.prototype.update = function() {
 
-    {% for post in site.posts %}
+        // Change dir if outside map
+        if (this.x > this.canvas.width + 20 || this.x < -20) {
+          this.velocity.x = -this.velocity.x;
+        }
+        if (this.y > this.canvas.height + 20 || this.y < -20) {
+          this.velocity.y = -this.velocity.y;
+        }
 
-    <div class="mdl-card mdl-shadow--2dp mdl-cell mdl-cell--4-col mdl-cell--4-col-desktop mdl-cell--4-col-tablet  mdl-cell--12-col-phone">
-      <div class="mdl-card__title" {% if post.image %} style="background: url('{{ post.image }}') center/cover;" {% endif %}>
-        <h2 class="mdl-card__title-text">{{ post.title }}</h2>
-      </div>
-      <div class="mdl-card__supporting-text">
-        {{ post.content | strip_html | truncatewords: 40 }}
-      </div>
-      <button class="post-button mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" onclick="location.href='{{ post.url | prepend: site.baseurl }}'">
-        <i class="material-icons">keyboard_arrow_right</i>
-      </button>
-      <div class="mdl-card__actions mdl-card--border">
-        <a class="mdl-button mdl-button--colored mdl-js-button mdl-js-ripple-effect" href="{{ post.url | prepend: site.baseurl }}">
-          {{ post.date | date: "%b %-d, %Y" }}
-        </a>
-      </div>
-      <div class="mdl-card__menu">
-        <button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect" id="post-{{ post.id }}">
-          <i class="material-icons">share</i>
-        </button>
-        <ul class="mdl-menu mdl-js-menu mdl-menu--bottom-right" for="post-{{ post.id }}">
-          <li><a href="https://www.facebook.com/dialog/share?app_id={app_id}&display=page&href={{ post.url | prepend: site.baseurl }}&redirect_uri={{ site.baseurl }}" class="mdl-menu__item">Facebook</a></li>
-          <li><a href="https://twitter.com/share?url={{ post.url | prepend: site.baseurl }}&text={{ post.title }}&via={{ site.twitter_username }}" class="mdl-menu__item">Twitter</a></li>
-          <li><a href="https://plus.google.com/share?url={{ post.url | prepend: site.baseurl }}" class="mdl-menu__item">Google+</a></li>
-        </ul>
-      </div>
-    </div>
+        // Update position
+        this.x += this.velocity.x;
+        this.y += this.velocity.y;
+      };
+      Particle.prototype.draw = function() {
 
-    {% endfor %}
+        // Draw particle
+        this.ctx.beginPath();
+        this.ctx.fillStyle = this.particleColor;
+        this.ctx.globalAlpha = 0.7;
+        this.ctx.arc(this.x, this.y, 1.5, 0, 2 * Math.PI);
+        this.ctx.fill();
+      };
 
-  {% endif %}
-  </div>
-</div>
+      // Create ParticleNetwork class
+      var ParticleNetwork = function(canvas, options) {
+
+        this.canvasDiv = canvas;
+        this.canvasDiv.size = {
+          'width': this.canvasDiv.offsetWidth,
+          'height': this.canvasDiv.offsetHeight
+        };
+
+        // Set options
+        options = options !== undefined ? options : {};
+        this.options = {
+          particleColor: (options.particleColor !== undefined) ? options.particleColor : '#fff',
+          background: (options.background !== undefined) ? options.background : '#1a252f',
+          interactive: (options.interactive !== undefined) ? options.interactive : true,
+          velocity: this.setVelocity(options.speed),
+          density: this.setDensity(options.density)
+        };
+
+        this.init();
+      };
+      ParticleNetwork.prototype.init = function() {
+
+        // Create background div
+        this.bgDiv = document.createElement('div');
+        this.canvasDiv.appendChild(this.bgDiv);
+        this.setStyles(this.bgDiv, {
+          'position': 'absolute',
+          'top': 0,
+          'left': 0,
+          'bottom': 0,
+          'right': 0,
+          'z-index': 1
+        });
+
+        // Check if valid background hex color
+        if ((/(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i).test(this.options.background)) {
+          this.setStyles(this.bgDiv, {
+            'background': this.options.background
+          });
+        }
+        // Else check if valid image
+        else if ((/\.(gif|jpg|jpeg|tiff|png)$/i).test(this.options.background)) {
+          this.setStyles(this.bgDiv, {
+            'background': 'url("' + this.options.background + '") no-repeat center',
+            'background-size': 'cover'
+          });
+        }
+        // Else throw error
+        else {
+          console.error('Please specify a valid background image or hexadecimal color');
+          return false;
+        }
+
+        // Check if valid particleColor
+        if (!(/(^#[0-9A-F]{6}$)|(^#[0-9A-F]{3}$)/i).test(this.options.particleColor)) {
+          console.error('Please specify a valid particleColor hexadecimal color');
+          return false;
+        }
+
+        // Create canvas & context
+        this.canvas = document.createElement('canvas');
+        this.canvasDiv.appendChild(this.canvas);
+        this.ctx = this.canvas.getContext('2d');
+        this.canvas.width = this.canvasDiv.size.width;
+        this.canvas.height = this.canvasDiv.size.height;
+
+        this.setStyles(this.canvasDiv, {
+          'position': 'relative'
+        });
+        this.setStyles(this.canvas, {
+          'z-index': '20',
+          'position': 'relative'
+        });
+
+        // Add resize listener to canvas
+        window.addEventListener('resize', function() {
+
+          // Check if div has changed size
+          if (this.canvasDiv.offsetWidth === this.canvasDiv.size.width && this.canvasDiv.offsetHeight === this.canvasDiv.size.height) {
+            return false;
+          }
+
+          // Scale canvas
+          this.canvas.width = this.canvasDiv.size.width = this.canvasDiv.offsetWidth;
+          this.canvas.height = this.canvasDiv.size.height = this.canvasDiv.offsetHeight;
+
+          // Set timeout to wait until end of resize event
+          clearTimeout(this.resetTimer);
+          this.resetTimer = setTimeout(function() {
+
+            // Reset particles
+            this.particles = [];
+            for (var i = 0; i < this.canvas.width * this.canvas.height / this.options.density; i++) {
+              this.particles.push(new Particle(this));
+            }
+            if (this.options.interactive) {
+              this.particles.push(this.mouseParticle);
+            }
+
+          }.bind(this), 500);
+
+        }.bind(this));
+
+        // Initialise particles
+        this.particles = [];
+        for (var i = 0; i < this.canvas.width * this.canvas.height / this.options.density; i++) {
+          this.particles.push(new Particle(this));
+        }
+
+        if (this.options.interactive) {
+
+          // Add mouse particle if interactive
+          this.mouseParticle = new Particle(this);
+          this.mouseParticle.velocity = {
+            x: 0,
+            y: 0
+          };
+          this.particles.push(this.mouseParticle);
+
+          // Mouse event listeners
+          this.canvas.addEventListener('mousemove', function(e) {
+            this.mouseParticle.x = e.clientX - this.canvas.offsetLeft;
+            this.mouseParticle.y = e.clientY - this.canvas.offsetTop;
+          }.bind(this));
+
+          this.canvas.addEventListener('mouseup', function(e) {
+            this.mouseParticle.velocity = {
+              x: (Math.random() - 0.5) * this.options.velocity,
+              y: (Math.random() - 0.5) * this.options.velocity
+            };
+            this.mouseParticle = new Particle(this);
+            this.mouseParticle.velocity = {
+              x: 0,
+              y: 0
+            };
+            this.particles.push(this.mouseParticle);
+          }.bind(this));
+        }
+
+        // Update canvas
+        requestAnimationFrame(this.update.bind(this));
+      }
+      ParticleNetwork.prototype.update = function() {
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        this.ctx.globalAlpha = 1;
+
+        // Draw particles
+        for (var i = 0; i < this.particles.length; i++) {
+          this.particles[i].update();
+          this.particles[i].draw();
+
+          // Draw connections
+          for (var j = this.particles.length - 1; j > i; j--) {
+            var distance = Math.sqrt(
+              Math.pow(this.particles[i].x - this.particles[j].x, 2) + Math.pow(this.particles[i].y - this.particles[j].y, 2)
+            );
+            if (distance > 120) {
+              continue;
+            }
+
+            this.ctx.beginPath();
+            this.ctx.strokeStyle = this.options.particleColor;
+            this.ctx.globalAlpha = (120 - distance) / 120;
+            this.ctx.lineWidth = 0.7;
+            this.ctx.moveTo(this.particles[i].x, this.particles[i].y);
+            this.ctx.lineTo(this.particles[j].x, this.particles[j].y);
+            this.ctx.stroke();
+          }
+        }
+
+        if (this.options.velocity !== 0) {
+          requestAnimationFrame(this.update.bind(this));
+        }
+      };
+
+      // Helper method to set velocity multiplier
+      ParticleNetwork.prototype.setVelocity = function(speed) {
+          if (speed === 'fast') {
+            return 1;
+          } else if (speed === 'slow') {
+            return 0.33;
+          } else if (speed === 'none') {
+            return 0;
+          }
+          return 0.66;
+        }
+        // Helper method to set density multiplier
+      ParticleNetwork.prototype.setDensity = function(density) {
+          if (density === 'high') {
+            return 5000;
+          } else if (density === 'low') {
+            return 20000;
+          }
+          return 10000;
+        }
+        // Helper method to set multiple styles
+      ParticleNetwork.prototype.setStyles = function(div, styles) {
+        for (var property in styles) {
+          div.style[property] = styles[property];
+        }
+      }
+
+      var canvasDiv = document.getElementById('particle-canvas');
+      var options = {
+        particleColor: '#e1aaff',
+        // background:'#673AB7',
+         background: '/img/home/mac.jpg',
+        interactive: true,
+        speed: 'medium',
+        density: 'high'
+      };
+      var particleCanvas = new ParticleNetwork(canvasDiv, options);
+      </script>
