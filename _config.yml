@@ -34,10 +34,10 @@ gems:
   - jekyll-archives
 
 #jekyll archives
-jekyll-archives:
-  enabled:
-    - categories
-    - posts
-  layout: 'archive'
-  permalinks:
-    category: '/category/:name/'
+# jekyll-archives:
+#   enabled:
+#     - categories
+#     - posts
+#   layout: 'archive'
+#   permalinks:
+#     category: '/category/:name/'

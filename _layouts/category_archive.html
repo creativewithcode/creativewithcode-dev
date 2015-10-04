@@ -24,7 +24,9 @@
             <div class="mdl-card__title" {% if post.image %} style="background: url('{{ post.image }}') center/cover;" {% endif %}>
               <h3 class="mdl-card__title-text">{{ post.title }}</h3>
             </div>
-        
+            <div class="mdl-card__supporting-text">
+              {{ post.content | strip_html | truncatewords: 50 }}
+            </div>
             <button class="post-button mdl-button mdl-js-button mdl-button--fab mdl-js-ripple-effect mdl-button--colored" onclick="location.href='{{ post.url | prepend: site.baseurl }}'">
               <i class="material-icons">keyboard_arrow_right</i>
             </button>

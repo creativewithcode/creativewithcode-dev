@@ -2,7 +2,7 @@
 layout: post
 title:  "Object Oriented JavaScript for beginners"
 date:   2015-05-03 11:34:20
-categories: ThreeJS
+categories: Technical
 author: Graeme Fulton
 image: /img/js.jpg
 ---
