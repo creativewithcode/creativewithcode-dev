@@ -2,7 +2,7 @@
 layout: post
 title:  "Seeing Sounds [Part 2]: Creating the terrain"
 date:   2015-04-25 11:34:20
-categories: ThreeJS
+categories: webgl
 author: Graeme Fulton
 image: /img/dunes-2.jpg
 ---

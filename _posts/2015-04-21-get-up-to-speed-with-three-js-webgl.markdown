@@ -2,7 +2,7 @@
 layout: post
 title:  "Beginners guide to three.js: set your first scene"
 date:   2015-04-21 11:34:20
-categories: ThreeJS
+categories: webgl
 author: Graeme Fulton
 image: /img/cube.png
 ---

@@ -2,7 +2,7 @@
 layout: post
 title:  "You can't escape this world (an infinite three.js world)"
 date:   2015-07-25 11:34:20
-categories: ThreeJS
+categories: webgl
 author: Graeme Fulton
 image: /img/road.jpg
 ---
