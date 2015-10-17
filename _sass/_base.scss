@@ -23,6 +23,13 @@ blockquote {
         margin-bottom: 0;
     }
 }
+blockquote::after {
+    content: none!important;
+    margin-left: -0.05em;
+}
+blockquote::before {
+    content: none!important;
+}
 
 /**
  * Code formatting

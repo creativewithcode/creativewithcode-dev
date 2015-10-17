@@ -5,33 +5,20 @@ permalink: /about/
 ---
 ###### Creative with Code
 
-Get creative with code. We're about experimenting with new front end web technologies
+Creative with Code is about experimenting with new technologies such as web graphics libraries, audio manipulation, and front end development frameworks. It's not only a place to learn about technical aspects, but also somewhere to think about why and how we make the things we do (see design section).
 
-###### Post Options
+>Sometimes it's fun to just make something,
+>
+>and sometimes you need to make the right thing.
+>
+>If what you're making depends on how you're feeling,
+>
+>get Creative with Code - do something not nothing.
 
-All the post, require an image and maybe an author, the image are used in the cards and the autor used for the footer in the cards. For use the images and author, just add a new key in the post config, something like this:
+<iframe width="560" height="315" src="https://www.youtube.com/embed/dItcDD4sOVs" frameborder="0" allowfullscreen></iframe>
 
-    ---
-    layout: post
-    title:  "Welcome to jekyll-mdl"
-    date:   2015-07-11 11:34:20
-    categories: jekyll
-    image: http://www.wchs4pets.org/wp-content/uploads/2015/03/cat_1-jpg.jpg
-    author: Google Developers Group Managua
-    ---
-
-###### Layout Configuration
-You can setup 4 types of layout
-
-    - Fixed Nav + Simple Card Grid
-    - Fixed Nav + Highlight Post + Card Grid
-    - Drawer Nav + Simple Card Grid
-    - Drawer Nav + Highlight Post + Card Grid
-
-For use this in the [_config.yml](https://github.com/gdg-managua/jekyll-mdl/blob/master/_config.yml) select the type of layout, rebuild the website and voilà :smile:
 
 ###### Contributing
-If you want to contribute to this project, please read the [CONTRIBUTING](https://github.com/gdg-managua/jekyll-mdl/blob/master/CONTRIBUTING.md) file and perform the following steps
 
     # Fork this repository
     # Clone your fork
